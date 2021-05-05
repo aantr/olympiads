@@ -6,9 +6,7 @@ problem_to_category = sqlalchemy.Table(
     'problem_to_category',
     SqlAlchemyBase.metadata,
     sqlalchemy.Column('problem', sqlalchemy.Integer, sqlalchemy.ForeignKey('problem.id')),
-    sqlalchemy.Column('problem_category', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('problem_category.id'))
-)
+    sqlalchemy.Column('problem_category', sqlalchemy.Integer)
 
 
 class Problem(SqlAlchemyBase):
