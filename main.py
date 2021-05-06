@@ -47,6 +47,7 @@ import components.login
 import components.errors
 import components.index
 import components.olympiads
+import components.results
 
 
 @app.route('/favicon.ico')

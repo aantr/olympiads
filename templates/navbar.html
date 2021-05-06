@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <img class="navbar-brand" src="{{ url_for('static', filename='img/icon.svg') }}"
              width="48" height="48" style="margin-left: 16px;">
-        <a class="navbar-brand" href="#">Test system</a>
+        <a class="navbar-brand" href="#">Olympiads</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent"
@@ -30,5 +30,12 @@
         </div>
     </div>
 </nav>
+<main role="main" class="container"><p>
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="alert alert-{{ cat }}" role="alert">
+        {{ msg }}
+    </div>
+    {% endfor %}
+</p></main>
 {% block content %}{% endblock %}
 </body>

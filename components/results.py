@@ -4,12 +4,12 @@ from werkzeug.exceptions import abort
 
 from data import db_session
 from data.level import Level
-from data.olympiad import Olympiad
+from data.result import Result
 from data.user import User
-from forms.edit_olympiad import EditOlympiadForm
 from forms.submit_olympiad import SubmitOlympiadForm
 from forms.login import LoginForm
 from forms.search_user import SearchUserForm
+from forms.submit_result import SubmitResultForm
 
 from global_app import get_app
 from utils.permissions_required import teacher_required
@@ -19,23 +19,24 @@ app = get_app()
 current_user: User
 
 
-@app.route('/olympiads', methods=['GET'])
+@app.route('/results', methods=['GET'])
 @teacher_required
-def olympiads():
+def results():
     db_sess = db_session.create_session()
-    olympiads = db_sess.query(Olympiad).all()
-    return render_template('olympiads.html', **locals())
+    results = db_sess.query(Result).all()
+    return render_template('results.html', **locals())
 
 
-@app.route('/olympiads/<int:id>', methods=['GET', 'POST'])
+@app.route('/results/<int:id>', methods=['GET', 'POST'])
 @teacher_required
-def edit_olympiad(id):
+def edit_result(id):
     db_sess = db_session.create_session()
-    olympiad = db_sess.query(Olympiad).filter(Olympiad.id == id).first()
-    if not olympiad:
+    result = db_sess.query(Result).filter(Result.id == id).first()
+    if not result:
         abort(404)
+
     form = EditOlympiadForm()
-    form.name.data = olympiad.name
+    form.name.data = result.name
     levels = {str(i.id): i for i in db_sess.query(Level).all()}
     form.level.choices = [(str(k), v.name) for k, v in levels.items()]
     if form.validate_on_submit():
@@ -66,13 +67,15 @@ def delete_olympiad(id):
     return redirect(url_for('olympiads'))
 
 
-@app.route('/add_olympiad', methods=['GET', 'POST'])
+@app.route('/add_result', methods=['GET', 'POST'])
 @teacher_required
-def add_olympiad():
+def add_result():
     db_sess = db_session.create_session()
-    form = SubmitOlympiadForm()
+    form = SubmitResultForm()
+
     levels = {str(i.id): i for i in db_sess.query(Level).all()}
     form.levels.choices = [(str(k), v.name) for k, v in levels.items()]
+
     if form.validate_on_submit():
         for i in form.levels.checked:
             level: Level = levels[i]

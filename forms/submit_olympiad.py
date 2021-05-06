@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired
 from forms.utils.multiply_checkbox_field import MultiplyCheckboxField
 
 
-class AddOlympiadForm(FlaskForm):
+class SubmitOlympiadForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     levels = MultiplyCheckboxField('level_checkbox', 'Levels')
     submit = SubmitField('Add')
