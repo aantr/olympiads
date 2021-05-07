@@ -1,21 +1,33 @@
 {% extends "navbar.html" %}
 {% block content %}
+
 <head>
 <body>
+
 <main role="main" class="container">
     <form action="" method="post">
         <div>{{ form.csrf_token }}</div>
 
-        <h6>{{ form.name.label.text }}</h6>
-        {{ form.name(class="form-control", style="max-width: 30vw") }}</br>
-
-        <h6>{{ form.level.label.text }}</h6>
-        <p>{{ form.level(class="form-select", style="min-width: 75px") }}</p>
+        <h6>{{ form.first_name.label.text }}</h6>
+        <p>{{ form.first_name(class="form-control", style="min-width: 75px") }}</p>
+        <h6>{{ form.last_name.label.text }}</h6>
+        <p>{{ form.last_name(class="form-control", style="min-width: 75px") }}</p>
+        <h6>{{ form.middle_name.label.text }}</h6>
+        <p>{{ form.middle_name(class="form-control", style="min-width: 75px") }}</p>
+        <h6>{{ form.birthday.label.text }}</h6>
+        <p>{{ form.birthday(class="form-control", type="date", style="min-width: 75px") }}</p>
+        <h6>{{ form.sex.label.text }}</h6>
+        <p>{{ form.sex(class="form-select", style="min-width: 75px") }}</p>
+        <h6>{{ form.study.label.text }}</h6>
+        <div class="form-check form-switch">
+            {{ form.study(class="form-check-input") }}
+        </div>
+        <h6>{{ form.n_class.label.text }}</h6>
+        <p>{{ form.n_class(class="form-select", style="min-width: 75px") }}</p>
 
         {{ form.submit(type="submit", class="btn btn-primary", style="min-width: 75px") }}
     </form>
     <p></p>
-
     <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -25,7 +37,7 @@
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>You are about to delete an olympiad and all connected records, this procedure is
+                    <p>You are about to delete a student and all connected records, this procedure is
                         irreversible.</p>
                     <p>Do you want to proceed?</p>
                     <p class="debug-url"></p>
@@ -38,7 +50,7 @@
         </div>
     </div>
     <a class="btn btn-danger"
-       data-href="{{url_for('delete_olympiad', id=olympiad.id)}}"
+       data-href="{{url_for('delete_student', id=student.id)}}"
        data-toggle="modal"
        data-target="#confirm-delete">Delete</a>
 </main>
@@ -48,4 +60,5 @@ $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 });
 </script>
 </body>
+
 {% endblock %}

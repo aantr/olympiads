@@ -4,8 +4,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
     <div class="container-fluid">
-        <img class="navbar-brand" src="{{ url_for('static', filename='img/icon.svg') }}"
-             width="48" height="48" style="margin-left: 16px;">
+        <img class="navbar-brand" src="{{ url_for('static', filename='img/icon.png') }}"
+             style="margin-left: 16px; width: 32px">
         <a class="navbar-brand" href="#">Olympiads</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -20,7 +20,10 @@
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/add_olympiad">Add olympiad</a></li>
                 <li class="nav-item"><a class="nav-link" href="/olympiads">Olympiads</a></li>
+                <li class="nav-item"><a class="nav-link" href="/add_result">Add result</a></li>
                 <li class="nav-item"><a class="nav-link" href="/results">Results</a></li>
+                <li class="nav-item"><a class="nav-link" href="/add_student">Add student</a></li>
+                <li class="nav-item"><a class="nav-link" href="/students">Students</a></li>
             </ul>
             <form class="d-flex">
                 <ul class="navbar-nav" style="margin-right: 25px">
@@ -36,6 +39,6 @@
         {{ msg }}
     </div>
     {% endfor %}
-</p></main>
+    </p></main>
 {% block content %}{% endblock %}
 </body>

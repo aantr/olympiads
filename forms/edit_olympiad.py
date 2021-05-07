@@ -12,4 +12,5 @@ class EditOlympiadForm(FlaskForm):
     def validate(self):
         if not FlaskForm.validate(self):
             return False
+        self.name.data = self.name.data.strip()
         return True

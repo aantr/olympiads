@@ -14,3 +14,6 @@ class Olympiad(SqlAlchemyBase):
     name = sqlalchemy.Column(sqlalchemy.String)
     level_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('level.id'))
     level = sqlalchemy.orm.relation('Level')
+
+    def get_name(self):
+        return f'{self.name} {self.level.name}'

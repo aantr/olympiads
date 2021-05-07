@@ -31,14 +31,10 @@ def login_():
         user = db_sess.query(User).filter(User.username == form.username.data).first()
         if not user:
             flash('Incorrect username or password', category='danger')
-        elif not user.confirmed_email:
-            flash('Email not confirmed', category='danger')
         elif not user.check_password(form.password.data):
             flash('Incorrect username or password', category='danger')
-        elif not user.confirmed_email:
-            flash('Email not confirmed', category='danger')
         else:
-            login_user(user, remember=False, duration=timedelta(minutes=1))
+            login_user(user, remember=form.remember_me.data, duration=timedelta(hours=24))
             return redirect(url_for('index'))
     else:
         msg = get_message_from_form(form)

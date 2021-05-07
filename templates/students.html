@@ -1,0 +1,30 @@
+{% extends "navbar.html" %}
+{% block content %}
+<head>
+<body>
+<main role="main" class="container">
+    <table class="table table-hover table-sm">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Sex</th>
+            <th scope="col">Study</th>
+            <th scope="col">Class</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in students %}
+        <tr onclick="window.location = '/students/{{ i.id }}';">
+            <td>{{ i.get_name() }}</td>
+            <td>{{ i.get_birthday() }}</td>
+            <td>{{ i.get_sex() }}</td>
+            <td>{{ i.get_study() }}</td>
+            <td>{{ i.n_class }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</main>
+</body>
+{% endblock %}

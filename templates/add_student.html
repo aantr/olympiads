@@ -1,0 +1,36 @@
+{% extends "navbar.html" %}
+{% block content %}
+
+<head>
+<body>
+
+<main role="main" class="container">
+    <form action="" method="post">
+        <div>{{ form.csrf_token }}</div>
+
+        <h6>{{ form.first_name.label.text }}</h6>
+        <p>{{ form.first_name(class="form-control", style="min-width: 75px") }}</p>
+        <h6>{{ form.last_name.label.text }}</h6>
+        <p>{{ form.last_name(class="form-control", style="min-width: 75px") }}</p>
+        <h6>{{ form.middle_name.label.text }}</h6>
+        <p>{{ form.middle_name(class="form-control", style="min-width: 75px") }}</p>
+        <h6>{{ form.birthday.label.text }}</h6>
+        <p>{{ form.birthday(class="form-control", type="date", style="min-width: 75px") }}</p>
+        <h6>{{ form.sex.label.text }}</h6>
+        <p>{{ form.sex(class="form-select", style="min-width: 75px") }}</p>
+        <h6>{{ form.study.label.text }}</h6>
+        <div class="form-check form-switch">
+            {{ form.study(class="form-check-input") }}
+        </div>
+        <h6>{{ form.n_class.label.text }}</h6>
+        <p>{{ form.n_class(class="form-select", style="min-width: 75px") }}</p>
+
+        {{ form.submit(type="submit", class="btn btn-primary", style="min-width: 75px") }}
+    </form>
+</main>
+<script>
+
+</script>
+</body>
+
+{% endblock %}

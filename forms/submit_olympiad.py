@@ -21,4 +21,5 @@ class SubmitOlympiadForm(FlaskForm):
         if not self.levels.checked:
             self.levels.errors.append('At least one level should be selected')
             return False
+        self.name.data = self.name.data.strip()
         return True

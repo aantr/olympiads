@@ -8,3 +8,6 @@ class File(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     extension = sqlalchemy.Column(sqlalchemy.String)
+
+    def get_name(self):
+        return f'{self.id}.{self.extension}'

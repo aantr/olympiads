@@ -46,8 +46,9 @@ def on_recreate_db():
 import components.login
 import components.errors
 import components.index
-import components.olympiads
-import components.results
+import components.olympiad
+import components.result
+import components.student
 
 
 @app.route('/favicon.ico')

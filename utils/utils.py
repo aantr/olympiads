@@ -18,5 +18,9 @@ def get_duration_from_time(time):
     return duration
 
 
-def date_format():
+def datetime_format():
     return '%d %B %Y, %H:%M'
+
+
+def date_format():
+    return '%d %B %Y'

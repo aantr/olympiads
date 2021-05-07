@@ -4,12 +4,10 @@ from werkzeug.exceptions import abort
 
 from data import db_session
 from data.level import Level
-from data.result import Result
+from data.olympiad import Olympiad
 from data.user import User
+from forms.edit_olympiad import EditOlympiadForm
 from forms.submit_olympiad import SubmitOlympiadForm
-from forms.login import LoginForm
-from forms.search_user import SearchUserForm
-from forms.submit_result import SubmitResultForm
 
 from global_app import get_app
 from utils.permissions_required import teacher_required
@@ -19,26 +17,29 @@ app = get_app()
 current_user: User
 
 
-@app.route('/results', methods=['GET'])
+@app.route('/olympiads', methods=['GET'])
 @teacher_required
-def results():
+def olympiads():
     db_sess = db_session.create_session()
-    results = db_sess.query(Result).all()
-    return render_template('results.html', **locals())
+    olympiads = db_sess.query(Olympiad).order_by(Olympiad.name).all()
+    return render_template('olympiads.html', **locals())
 
 
-@app.route('/results/<int:id>', methods=['GET', 'POST'])
+@app.route('/olympiads/<int:id>', methods=['GET', 'POST'])
 @teacher_required
-def edit_result(id):
+def edit_olympiad(id):
     db_sess = db_session.create_session()
-    result = db_sess.query(Result).filter(Result.id == id).first()
-    if not result:
+    olympiad = db_sess.query(Olympiad).filter(Olympiad.id == id).first()
+    if not olympiad:
         abort(404)
-
-    form = EditOlympiadForm()
-    form.name.data = result.name
+    args = ['name']
+    form = EditOlympiadForm(
+        level=str(olympiad.level.id),
+        **{i: olympiad.__getattribute__(i) for i in args}
+    )
     levels = {str(i.id): i for i in db_sess.query(Level).all()}
     form.level.choices = [(str(k), v.name) for k, v in levels.items()]
+
     if form.validate_on_submit():
         olympiad.level_id = levels[form.level.data].id
         olympiad.name = form.name.data
@@ -67,15 +68,13 @@ def delete_olympiad(id):
     return redirect(url_for('olympiads'))
 
 
-@app.route('/add_result', methods=['GET', 'POST'])
+@app.route('/add_olympiad', methods=['GET', 'POST'])
 @teacher_required
-def add_result():
+def add_olympiad():
     db_sess = db_session.create_session()
-    form = SubmitResultForm()
-
+    form = SubmitOlympiadForm()
     levels = {str(i.id): i for i in db_sess.query(Level).all()}
     form.levels.choices = [(str(k), v.name) for k, v in levels.items()]
-
     if form.validate_on_submit():
         for i in form.levels.checked:
             level: Level = levels[i]
