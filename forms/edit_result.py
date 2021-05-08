@@ -11,6 +11,7 @@ class EditResultForm(FlaskForm):
     date = DateField('Date', validators=[DataRequired()])
     place = IntegerField('Place', validators=[DataRequired()])
     points = IntegerField('Points', validators=[DataRequired()])
+    level = StringField('Level', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
     protocol = FileField('Protocol', validators=[])
     n_class = SelectField('Class', validators=[DataRequired()],
@@ -23,5 +24,6 @@ class EditResultForm(FlaskForm):
         if self.protocol.data and '.' not in self.protocol.data.filename:
             self.protocol.errors.append('Invalid filename')
             return False
+        self.level.data = self.level.data.strip()
         self.location.data = self.location.data.strip()
         return True

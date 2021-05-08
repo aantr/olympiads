@@ -1,0 +1,51 @@
+{% extends "navbar.html" %}
+{% block content %}
+<head>
+<body>
+<main role="main" class="container">
+    <form action="" method="post">
+        <div>{{ form.csrf_token }}</div>
+        <h6>{{ form.last_name.label.text }}</h6>
+        <p>{{ form.last_name(class="form-control", style="min-width: 75px") }}</p>
+        <h6>{{ form.n_class.label.text }}</h6>
+        <p>{{ form.n_class(class="form-select", style="min-width: 75px") }}</p>
+        <h6>{{ form.olympiad.label.text }}</h6>
+        <p>{{ form.olympiad(class="form-control", style="min-width: 75px") }}</p>
+        <h6>{{ form.level.label.text }}</h6>
+        <p>{{ form.level(class="form-select", style="min-width: 75px") }}</p>
+
+        {{ form.apply(type="submit", class="btn btn-primary", style="min-width: 85px") }}
+        {{ form.get_report(type="submit", class="btn btn-success", style="min-width: 85px; margin: 15px;") }}
+
+    </form>
+    <table class="table table-hover table-sm">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Location</th>
+            <th scope="col">Olympiad</th>
+            <th scope="col">Student</th>
+            <th scope="col">Class</th>
+            <th scope="col">Points</th>
+            <th scope="col">Location</th>
+            <th scope="col">Place</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in results %}
+        <tr>
+            <td>{{ i.get_date() }}</td>
+            <td>{{ i.location }}</td>
+            <td>{{ i.olympiad.get_name() }}</td>
+            <td>{{ i.student.get_name() }}</td>
+            <td>{{ i.n_class }}</td>
+            <td>{{ i.points }}</td>
+            <td>{{ i.location }}</td>
+            <td>{{ i.place }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</main>
+</body>
+{% endblock %}

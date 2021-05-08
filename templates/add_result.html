@@ -2,22 +2,26 @@
 {% block content %}
 
 <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+</head>
 <body>
-
 <main role="main" class="container">
     <form action="" enctype="multipart/form-data" method="post">
         <div>{{ form.csrf_token }}</div>
 
         <h6>{{ form.olympiad.label.text }}</h6>
-        <p>{{ form.olympiad(class="form-select", style="min-width: 75px") }}</p>
+        <p>{{ form.olympiad(class="form-select", style="width: 500px") }}</p>
         <h6>{{ form.student.label.text }}</h6>
-        <p>{{ form.student(class="form-select", style="min-width: 75px") }}</p>
+        <p>{{ form.student(class="form-select", style="width: 500px") }}</p>
         <h6>{{ form.date.label.text }}</h6>
         <p>{{ form.date(class="form-control", type="date", style="min-width: 75px") }}</p>
         <h6>{{ form.place.label.text }}</h6>
         <p>{{ form.place(class="form-control", type="number", style="min-width: 75px") }}</p>
         <h6>{{ form.points.label.text }}</h6>
         <p>{{ form.points(class="form-control", type="number", style="min-width: 75px") }}</p>
+        <h6>{{ form.level.label.text }}</h6>
+        <p>{{ form.level(class="form-control", style="min-width: 75px") }}</p>
         <h6>{{ form.location.label.text }}</h6>
         <p>{{ form.location(class="form-control", style="min-width: 75px") }}</p>
         <h6>{{ form.protocol.label.text }}</h6>
@@ -29,7 +33,18 @@
     </form>
 </main>
 <script>
-
+$(document).ready(function() {
+    $('#student').select2({  // init Select2
+        allowClear: true,
+        "width": "style"
+    });
+});
+$(document).ready(function() {
+    $('#olympiad').select2({  // init Select2
+        allowClear: true,
+        "width": "style"
+    });
+});
 </script>
 </body>
 

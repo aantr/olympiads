@@ -21,8 +21,10 @@ class Result(SqlAlchemyBase):
     date = sqlalchemy.Column(sqlalchemy.Date)
     place = sqlalchemy.Column(sqlalchemy.Integer)
     points = sqlalchemy.Column(sqlalchemy.Integer)
+    level = sqlalchemy.Column(sqlalchemy.String)
     location = sqlalchemy.Column(sqlalchemy.String)
-    protocol_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('file.id'))
+    protocol_id = sqlalchemy.Column(sqlalchemy.Integer,
+                                    sqlalchemy.ForeignKey('file.id'))
     protocol = sqlalchemy.orm.relation('File')
     n_class = sqlalchemy.Column(sqlalchemy.Integer)
 

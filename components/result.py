@@ -1,20 +1,15 @@
 import os
 
-from flask import render_template, redirect, flash, request, url_for
-from flask_login import login_required, current_user
+from flask import render_template, redirect, flash, url_for, send_from_directory
 from werkzeug.exceptions import abort
 
 from data import db_session
 from data.file import File
-from data.level import Level
 from data.olympiad import Olympiad
 from data.result import Result
 from data.student import Student
 from data.user import User
-from forms.edit_olympiad import EditOlympiadForm
 from forms.edit_result import EditResultForm
-from forms.submit_olympiad import SubmitOlympiadForm
-from forms.login import LoginForm
 from forms.submit_result import SubmitResultForm
 
 from global_app import get_app, get_dir
@@ -33,6 +28,19 @@ def results():
     return render_template('results.html', **locals())
 
 
+@app.route('/protocol/<int:id>', methods=['GET', 'POST'])
+@teacher_required
+def protocol(id):
+    db_sess = db_session.create_session()
+    protocol = db_sess.query(File).filter(File.id == id).first()
+    if not protocol:
+        abort(404)
+    base = os.path.join(get_dir(), 'files', 'protocol')
+    return send_from_directory(
+        directory=base, filename=protocol.get_name(),
+        as_attachment=True, attachment_filename='protocol_' + protocol.get_name())
+
+
 @app.route('/results/<int:id>', methods=['GET', 'POST'])
 @teacher_required
 def edit_result(id):
@@ -41,7 +49,7 @@ def edit_result(id):
     if not result:
         abort(404)
 
-    args = ['date', 'place', 'points', 'location', 'n_class']
+    args = ['date', 'place', 'points', 'level', 'location', 'n_class']
     form = EditResultForm(
         olympiad=result.olympiad.get_name(),
         student=result.student.get_name(),
@@ -53,9 +61,12 @@ def edit_result(id):
     form.student.choices = [(str(k), v.get_name()) for k, v in students.items()]
 
     if form.validate_on_submit():
+        result.olympiad_id = olympiads[form.olympiad.data].id
+        result.student_id = students[form.student.data].id
         result.date = form.date.data
         result.place = form.place.data
         result.points = form.points.data
+        result.level = form.level.data
         result.location = form.location.data
         result.n_class = form.n_class.data
 
@@ -117,18 +128,20 @@ def add_result():
         result.student_id = students[form.student.data].id
         result.date = form.date.data
         result.points = form.points.data
+        result.level = form.level.data
         result.location = form.location.data
         result.n_class = form.n_class.data
         result.place = form.place.data
 
-        protocol = File()
-        base = os.path.join(get_dir(), 'files', 'protocol')
-        protocol.extension = os.path.splitext(form.protocol.data.filename)[1][1:]
-        db_sess.add(protocol)
-        db_sess.flush()
-        with open(os.path.join(base, f'{protocol.id}.{protocol.extension}'), 'wb') as f:
-            f.write(form.protocol.data.stream.read())
-        result.protocol_id = protocol.id
+        if form.protocol.data:
+            protocol = File()
+            base = os.path.join(get_dir(), 'files', 'protocol')
+            protocol.extension = os.path.splitext(form.protocol.data.filename)[1][1:]
+            db_sess.add(protocol)
+            db_sess.flush()
+            with open(os.path.join(base, f'{protocol.id}.{protocol.extension}'), 'wb') as f:
+                f.write(form.protocol.data.stream.read())
+            result.protocol_id = protocol.id
         db_sess.add(result)
         flash(f'Successfully added result', category='success')
         db_sess.commit()

@@ -41,7 +41,7 @@ def get_result_row(db_sess, user, session, problem_ids):
 
 def render_result_rows(db_sess, session):
     problem_ids = [i.id for i in session.problems]
-    problems_names = [i.name for i in session.problems]
+    problems_names = [i.olympiad for i in session.problems]
     members = [j.member for j in db_sess.query(SessionMember).
         filter(SessionMember.session_id == session.id).all()]
     rows = [get_result_row(db_sess, i, session, problem_ids) for n, i in enumerate(members)]

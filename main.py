@@ -49,6 +49,8 @@ import components.index
 import components.olympiad
 import components.result
 import components.student
+import components.transfer
+import components.report
 
 
 @app.route('/favicon.ico')

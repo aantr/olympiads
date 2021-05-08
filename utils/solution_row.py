@@ -10,9 +10,9 @@ def get_solution_row(solution):
     i = solution
     solution_row = {'row': [], 'problem_id': i.problem_id}
     for x in [
-        i.id, i.user.username, i.problem.name,
+        i.id, i.user.username, i.problem.olympiad,
         i.sent_date.strftime(date_format()),
-        languages[i.lang_code_name].name,
+        languages[i.lang_code_name].olympiad,
         get_message_solution(i),
         i.get_max_time(),
         i.get_max_memory()
