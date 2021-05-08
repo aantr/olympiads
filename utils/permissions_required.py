@@ -12,7 +12,7 @@ def permissions_required(permissions: str):
         def wrapper(*args, **kwargs):
             d = {'teacher': current_user.has_rights_teacher,
                  'admin': current_user.has_rights_admin}
-            if not d.get(permissions):
+            if not d.get(permissions)():
                 abort(403)
                 return
             return func(*args, **kwargs)

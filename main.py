@@ -31,7 +31,12 @@ def on_recreate_db():
 
     user = User()
     user.username = 'admin'
+    user.type = 10
     user.set_password('admin')
+    db_sess.add(user)
+    user = User()
+    user.username = 'teacher'
+    user.set_password('teacher')
     db_sess.add(user)
 
     for i in ['Школьный', 'Региональный', 'Всероссийский']:

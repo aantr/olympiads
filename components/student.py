@@ -8,7 +8,7 @@ from forms.edit_student import EditStudentForm
 from forms.submit_student import SubmitStudentForm
 
 from global_app import get_app
-from utils.permissions_required import teacher_required
+from utils.permissions_required import teacher_required, admin_required
 from utils.utils import get_message_from_form
 
 app = get_app()
@@ -16,7 +16,7 @@ current_user: User
 
 
 @app.route('/students', methods=['GET'])
-@teacher_required
+@admin_required
 def students():
     db_sess = db_session.create_session()
     students = db_sess.query(Student).order_by(Student.last_name, Student.first_name).all()
@@ -24,7 +24,7 @@ def students():
 
 
 @app.route('/students/<int:id>', methods=['GET', 'POST'])
-@teacher_required
+@admin_required
 def edit_student(id):
     db_sess = db_session.create_session()
     student = db_sess.query(Student).filter(Student.id == id).first()
@@ -61,7 +61,7 @@ def edit_student(id):
 
 
 @app.route('/delete_student/<int:id>', methods=['GET'])
-@teacher_required
+@admin_required
 def delete_student(id):
     db_sess = db_session.create_session()
     student = db_sess.query(Student).filter(Student.id == id).first()
@@ -75,7 +75,7 @@ def delete_student(id):
 
 
 @app.route('/add_student', methods=['GET', 'POST'])
-@teacher_required
+@admin_required
 def add_student():
     db_sess = db_session.create_session()
     form = SubmitStudentForm()

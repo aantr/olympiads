@@ -5,13 +5,13 @@ from werkzeug.utils import redirect
 from data import db_session
 from data.student import Student
 from global_app import get_app
-from utils.permissions_required import teacher_required
+from utils.permissions_required import teacher_required, admin_required
 
 app = get_app()
 
 
 @app.route('/confirm_transfer', methods=['GET'])
-@teacher_required
+@admin_required
 def confirm_transfer():
     db_sess = db_session.create_session()
     students = db_sess.query(Student).all()
@@ -27,7 +27,7 @@ def confirm_transfer():
 
 
 @app.route('/transfer', methods=['GET'])
-@teacher_required
+@admin_required
 def transfer():
     db_sess = db_session.create_session()
     return render_template('transfer.html')

@@ -13,14 +13,14 @@ from data.student import Student
 from data.user import User
 from forms.report import ReportForm
 from global_app import get_app, get_dir
-from utils.permissions_required import teacher_required
+from utils.permissions_required import teacher_required, admin_required
 
 app = get_app()
 current_user: User
 
 
 @app.route('/report', methods=['GET', 'POST'])
-@teacher_required
+@admin_required
 def report():
     db_sess = db_session.create_session()
     form = ReportForm()
@@ -71,7 +71,7 @@ def get_report(db_sess, query):
 
 
 @app.route('/report/<int:id>', methods=['GET'])
-@teacher_required
+@admin_required
 def download_report(id):
     db_sess = db_session.create_session()
     report = db_sess.query(File).filter(File.id == id).first()

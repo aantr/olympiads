@@ -10,7 +10,7 @@ from forms.edit_olympiad import EditOlympiadForm
 from forms.submit_olympiad import SubmitOlympiadForm
 
 from global_app import get_app
-from utils.permissions_required import teacher_required
+from utils.permissions_required import teacher_required, admin_required
 from utils.utils import get_message_from_form
 
 app = get_app()
@@ -18,7 +18,7 @@ current_user: User
 
 
 @app.route('/olympiads', methods=['GET'])
-@teacher_required
+@admin_required
 def olympiads():
     db_sess = db_session.create_session()
     olympiads = db_sess.query(Olympiad).order_by(Olympiad.name).all()
@@ -26,7 +26,7 @@ def olympiads():
 
 
 @app.route('/olympiads/<int:id>', methods=['GET', 'POST'])
-@teacher_required
+@admin_required
 def edit_olympiad(id):
     db_sess = db_session.create_session()
     olympiad = db_sess.query(Olympiad).filter(Olympiad.id == id).first()
@@ -55,7 +55,7 @@ def edit_olympiad(id):
 
 
 @app.route('/delete_olympiad/<int:id>', methods=['GET'])
-@teacher_required
+@admin_required
 def delete_olympiad(id):
     db_sess = db_session.create_session()
     olympiad = db_sess.query(Olympiad).filter(Olympiad.id == id).first()
@@ -69,7 +69,7 @@ def delete_olympiad(id):
 
 
 @app.route('/add_olympiad', methods=['GET', 'POST'])
-@teacher_required
+@admin_required
 def add_olympiad():
     db_sess = db_session.create_session()
     form = SubmitOlympiadForm()

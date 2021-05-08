@@ -13,7 +13,7 @@ from forms.edit_result import EditResultForm
 from forms.submit_result import SubmitResultForm
 
 from global_app import get_app, get_dir
-from utils.permissions_required import teacher_required
+from utils.permissions_required import teacher_required, admin_required
 from utils.utils import get_message_from_form
 
 app = get_app()
@@ -21,7 +21,7 @@ current_user: User
 
 
 @app.route('/results', methods=['GET'])
-@teacher_required
+@admin_required
 def results():
     db_sess = db_session.create_session()
     results = db_sess.query(Result).all()
@@ -29,7 +29,7 @@ def results():
 
 
 @app.route('/protocol/<int:id>', methods=['GET', 'POST'])
-@teacher_required
+@admin_required
 def protocol(id):
     db_sess = db_session.create_session()
     protocol = db_sess.query(File).filter(File.id == id).first()
@@ -42,7 +42,7 @@ def protocol(id):
 
 
 @app.route('/results/<int:id>', methods=['GET', 'POST'])
-@teacher_required
+@admin_required
 def edit_result(id):
     db_sess = db_session.create_session()
     result = db_sess.query(Result).filter(Result.id == id).first()
@@ -95,7 +95,7 @@ def edit_result(id):
 
 
 @app.route('/delete_result/<int:id>', methods=['GET'])
-@teacher_required
+@admin_required
 def delete_result(id):
     db_sess = db_session.create_session()
     result = db_sess.query(Result).filter(Result.id == id).first()
