@@ -39,7 +39,7 @@ def on_recreate_db():
     user.set_password('teacher')
     db_sess.add(user)
 
-    for i in ['Школьный', 'Региональный', 'Всероссийский']:
+    for i in ['Школьный', 'Муниципальный', 'Региональный', 'Всероссийский']:
         level = Level()
         level.name = i
         db_sess.add(level)
