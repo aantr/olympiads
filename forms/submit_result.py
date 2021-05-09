@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, IntegerField, FileField, DateField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange, InputRequired
 
 
 class SubmitResultForm(FlaskForm):
@@ -8,9 +8,11 @@ class SubmitResultForm(FlaskForm):
     student = SelectField('Student', validators=[DataRequired()])
 
     date = DateField('Date', validators=[DataRequired()])
-    place = IntegerField('Place', validators=[DataRequired()])
-    points = IntegerField('Points', validators=[DataRequired()])
-    level = StringField('Level', validators=[DataRequired()])
+    place = IntegerField('Place', validators=[InputRequired(),
+                                              NumberRange(min=1, message='Слишком маленькое число')])
+    points = IntegerField('Points', validators=[InputRequired(),
+                                                NumberRange(min=0, message='Слишком маленькое число')])
+    level = SelectField('Level', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
     protocol = FileField('Protocol', validators=[])
     n_class = SelectField('Class', validators=[DataRequired()],

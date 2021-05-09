@@ -11,7 +11,7 @@ class EditResultForm(FlaskForm):
     date = DateField('Date', validators=[DataRequired()])
     place = IntegerField('Place', validators=[DataRequired()])
     points = IntegerField('Points', validators=[DataRequired()])
-    level = StringField('Level', validators=[DataRequired()])
+    level = SelectField('Level', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
     protocol = FileField('Protocol', validators=[])
     n_class = SelectField('Class', validators=[DataRequired()],

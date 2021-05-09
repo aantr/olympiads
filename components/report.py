@@ -20,12 +20,14 @@ current_user: User
 
 
 @app.route('/report', methods=['GET', 'POST'])
-@admin_required
+@teacher_required
 def report():
     db_sess = db_session.create_session()
     form = ReportForm()
     levels = {str(i.id): i for i in db_sess.query(Level).all()}
     form.level.choices = [('', '')] + [(str(k), v.name) for k, v in levels.items()]
+    olympiad_names = [i[0] for i in db_sess.query(Olympiad.name).distinct().all()]
+    form.olympiad.choices = [''] + olympiad_names
 
     results = db_sess.query(Result).join(Olympiad).join(Student)
     if form.validate_on_submit():
@@ -64,14 +66,14 @@ def get_report(db_sess, query):
                result.n_class, result.date.strftime('%d.%m.') + str(result.date.year),
                result.student.last_name, result.student.first_name,
                (result.student.middle_name if result.student.middle_name else ''),
-               result.place, result.level, result.points]
+               result.place, result.level.name, result.points]
         worksheet.write_row(i + 1, 0, row)
     workbook.close()
     return redirect(url_for('download_report', id=file.id))
 
 
 @app.route('/report/<int:id>', methods=['GET'])
-@admin_required
+@teacher_required
 def download_report(id):
     db_sess = db_session.create_session()
     report = db_sess.query(File).filter(File.id == id).first()

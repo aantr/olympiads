@@ -1,12 +1,14 @@
 import os
 
 from flask import render_template, redirect, flash, url_for, send_from_directory
+from flask_login import current_user
 from werkzeug.exceptions import abort
 
 from data import db_session
 from data.file import File
 from data.olympiad import Olympiad
 from data.result import Result
+from data.result_level import ResultLevel
 from data.student import Student
 from data.user import User
 from forms.edit_result import EditResultForm
@@ -21,7 +23,7 @@ current_user: User
 
 
 @app.route('/results', methods=['GET'])
-@admin_required
+@teacher_required
 def results():
     db_sess = db_session.create_session()
     results = db_sess.query(Result).all()
@@ -49,16 +51,19 @@ def edit_result(id):
     if not result:
         abort(404)
 
-    args = ['date', 'place', 'points', 'level', 'location', 'n_class']
+    args = ['date', 'place', 'points', 'location', 'n_class']
     form = EditResultForm(
         olympiad=result.olympiad.get_name(),
         student=result.student.get_name(),
+        level=result.level.name,
         **{i: result.__getattribute__(i) for i in args}
     )
     olympiads = {str(i.id): i for i in db_sess.query(Olympiad).order_by(Olympiad.name).all()}
     students = {str(i.id): i for i in db_sess.query(Student).order_by(Student.last_name, Student.first_name).all()}
+    levels = {str(i.id): i for i in db_sess.query(ResultLevel).all()}
     form.olympiad.choices = [(str(k), v.get_name()) for k, v in olympiads.items()]
     form.student.choices = [(str(k), v.get_name()) for k, v in students.items()]
+    form.level.choices = [(str(k), v.name) for k, v in levels.items()]
 
     if form.validate_on_submit():
         result.olympiad_id = olympiads[form.olympiad.data].id
@@ -66,7 +71,7 @@ def edit_result(id):
         result.date = form.date.data
         result.place = form.place.data
         result.points = form.points.data
-        result.level = form.level.data
+        result.level_id = levels[form.level.data].id
         result.location = form.location.data
         result.n_class = form.n_class.data
 
@@ -119,8 +124,10 @@ def add_result():
     form = SubmitResultForm()
     olympiads = {str(i.id): i for i in db_sess.query(Olympiad).order_by(Olympiad.name).all()}
     students = {str(i.id): i for i in db_sess.query(Student).order_by(Student.last_name, Student.first_name).all()}
+    levels = {str(i.id): i for i in db_sess.query(ResultLevel).all()}
     form.olympiad.choices = [(str(k), v.get_name()) for k, v in olympiads.items()]
     form.student.choices = [(str(k), v.get_name()) for k, v in students.items()]
+    form.level.choices = [(str(k), v.name) for k, v in levels.items()]
 
     if form.validate_on_submit():
         result = Result()
@@ -128,7 +135,7 @@ def add_result():
         result.student_id = students[form.student.data].id
         result.date = form.date.data
         result.points = form.points.data
-        result.level = form.level.data
+        result.level_id = levels[form.level.data].id
         result.location = form.location.data
         result.n_class = form.n_class.data
         result.place = form.place.data
@@ -145,7 +152,10 @@ def add_result():
         db_sess.add(result)
         flash(f'Successfully added result', category='success')
         db_sess.commit()
-        return redirect(url_for('results'))
+        if current_user.has_rights_admin():
+            return redirect(url_for('results'))
+        else:
+            return redirect(url_for('add_result'))
     else:
         msg = get_message_from_form(form)
         if msg:

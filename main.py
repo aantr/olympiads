@@ -4,6 +4,7 @@ import socket
 
 from data import db_session
 from data.level import Level
+from data.result_level import ResultLevel
 from data.user import User
 import global_app
 from utils.init_db import init_db
@@ -41,6 +42,10 @@ def on_recreate_db():
 
     for i in ['Школьный', 'Муниципальный', 'Региональный', 'Всероссийский']:
         level = Level()
+        level.name = i
+        db_sess.add(level)
+    for i in ['Победитель', 'Призер', 'Участник']:
+        level = ResultLevel()
         level.name = i
         db_sess.add(level)
 

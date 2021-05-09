@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired
 class ReportForm(FlaskForm):
     last_name = StringField('Last name')
     n_class = SelectField('Class', choices={str(i): i for i in [''] + list(range(1, 12))})
-    olympiad = StringField('Olympiad')
+    olympiad = SelectField('Olympiad')
     level = SelectField('Level')
     apply = SubmitField('Apply')
     get_report = SubmitField('Get report')

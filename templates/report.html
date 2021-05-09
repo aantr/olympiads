@@ -10,7 +10,7 @@
         <h6>{{ form.n_class.label.text }}</h6>
         <p>{{ form.n_class(class="form-select", style="min-width: 75px") }}</p>
         <h6>{{ form.olympiad.label.text }}</h6>
-        <p>{{ form.olympiad(class="form-control", style="min-width: 75px") }}</p>
+        <p>{{ form.olympiad(class="form-select", style="min-width: 75px") }}</p>
         <h6>{{ form.level.label.text }}</h6>
         <p>{{ form.level(class="form-select", style="min-width: 75px") }}</p>
 
@@ -29,6 +29,7 @@
             <th scope="col">Points</th>
             <th scope="col">Location</th>
             <th scope="col">Place</th>
+            <th scope="col">Level</th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +43,7 @@
             <td>{{ i.points }}</td>
             <td>{{ i.location }}</td>
             <td>{{ i.place }}</td>
+            <td>{{ i.level.name }}</td>
         </tr>
         {% endfor %}
         </tbody>
