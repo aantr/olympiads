@@ -43,7 +43,8 @@ def edit_olympiad(id):
 
     if form.validate_on_submit():
         olympiad_ = db_sess.query(Olympiad).filter(func.lower(Olympiad.name) == func.lower(form.name.data)). \
-            filter(Olympiad.level_id == levels[form.level.data].id).first()
+            filter(Olympiad.level_id == levels[form.level.data].id).\
+            filter(Olympiad.id != olympiad.id).first()
         if olympiad_:
             flash('Olympiad with such name already exists', category='danger')
             return render_template('edit_olympiad.html', **locals())

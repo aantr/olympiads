@@ -40,7 +40,8 @@ def edit_student(id):
     )
     if form.validate_on_submit():
         student_ = db_sess.query(Student).filter(func.lower(Student.last_name) == func.lower(form.last_name.data)). \
-            filter(func.lower(Student.first_name) == func.lower(form.first_name.data)).first()
+            filter(func.lower(Student.first_name) == func.lower(form.first_name.data)).\
+            filter(Student.id != student.id).first()
         if student_:
             flash('Student with such last name and first name already exists', category='danger')
             return render_template('edit_student.html', **locals())
