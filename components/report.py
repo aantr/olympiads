@@ -62,11 +62,19 @@ def get_report(db_sess, query):
             'Имя', 'Отчество', 'Место', 'Ранг', 'Балл']
     worksheet.write_row(0, 0, head)
     for i, result in enumerate(query.all()):
-        row = [i + 1, result.olympiad.name, result.olympiad.level.name,
-               result.n_class, result.date.strftime('%d.%m.') + str(result.date.year),
-               result.student.last_name, result.student.first_name,
-               (result.student.middle_name if result.student.middle_name else ''),
-               result.place, result.level.name, result.points]
+        row = [
+            i + 1,
+            result.olympiad.name,
+            result.olympiad.level.name,
+            result.n_class,
+            result.date.strftime('%d.%m.') + str(result.date.year),
+            result.student.last_name,
+            result.student.first_name,
+            (result.student.middle_name if result.student.middle_name else ''),
+            result.place,
+            (result.level.name if result.level else ''),
+            result.points
+        ]
         worksheet.write_row(i + 1, 0, row)
     workbook.close()
     return redirect(url_for('download_report', id=file.id))
