@@ -39,9 +39,9 @@ def edit_student(id):
         **{i: student.__getattribute__(i) for i in args}
     )
     if form.validate_on_submit():
-        student = db_sess.query(Student).filter(func.lower(Student.last_name) == func.lower(form.last_name.data)). \
+        student_ = db_sess.query(Student).filter(func.lower(Student.last_name) == func.lower(form.last_name.data)). \
             filter(func.lower(Student.first_name) == func.lower(form.first_name.data)).first()
-        if student:
+        if student_:
             flash('Student with such last name and first name already exists', category='danger')
             return render_template('edit_student.html', **locals())
         student.sex = Student.get_sex_choices().index(form.sex.data)
