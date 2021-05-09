@@ -1,4 +1,5 @@
 from flask import render_template, redirect, flash, url_for
+from sqlalchemy import func
 from werkzeug.exceptions import abort
 
 from data import db_session
@@ -38,8 +39,11 @@ def edit_student(id):
         **{i: student.__getattribute__(i) for i in args}
     )
     if form.validate_on_submit():
-        print(form.first_name.data)
-        print(form.study.data)
+        student = db_sess.query(Student).filter(func.lower(Student.last_name) == func.lower(form.last_name.data)). \
+            filter(func.lower(Student.first_name) == func.lower(form.first_name.data)).first()
+        if student:
+            flash('Student with such last name and first name already exists', category='danger')
+            return render_template('edit_student.html', **locals())
         student.sex = Student.get_sex_choices().index(form.sex.data)
         student.study = form.study.data
         student.birthday = form.birthday.data
@@ -81,6 +85,12 @@ def add_student():
     form = SubmitStudentForm()
     sex = Student.get_sex_choices()
     if form.validate_on_submit():
+        student = db_sess.query(Student).filter(func.lower(Student.last_name) == func.lower(form.last_name.data)). \
+            filter(func.lower(Student.first_name) == func.lower(form.first_name.data)).first()
+        if student:
+            flash('Student with such last name and first name already exists', category='danger')
+            return render_template('add_student.html', **locals())
+
         student = Student()
         student.n_class = form.n_class.data
         student.middle_name = form.middle_name.data
