@@ -50,12 +50,11 @@ def edit_result(id):
     result = db_sess.query(Result).filter(Result.id == id).first()
     if not result:
         abort(404)
-
     args = ['date', 'place', 'points', 'location', 'n_class']
     form = EditResultForm(
-        olympiad=result.olympiad.get_name(),
-        student=result.student.get_name(),
-        level=result.level.name,
+        olympiad=result.olympiad.id,
+        student=result.student.id,
+        level=result.level.id if result.level else None,
         **{i: result.__getattribute__(i) for i in args}
     )
     olympiads = {str(i.id): i for i in db_sess.query(Olympiad).order_by(Olympiad.name).all()}
@@ -63,7 +62,7 @@ def edit_result(id):
     levels = {str(i.id): i for i in db_sess.query(ResultLevel).all()}
     form.olympiad.choices = [(str(k), v.get_name()) for k, v in olympiads.items()]
     form.student.choices = [(str(k), v.get_name()) for k, v in students.items()]
-    form.level.choices = [(str(k), v.name) for k, v in levels.items()]
+    form.level.choices = [('', '')] + [(str(k), v.name) for k, v in levels.items()]
 
     if form.validate_on_submit():
         result.olympiad_id = olympiads[form.olympiad.data].id
@@ -71,7 +70,7 @@ def edit_result(id):
         result.date = form.date.data
         result.place = form.place.data
         result.points = form.points.data
-        result.level_id = levels[form.level.data].id
+        result.level_id = levels[form.level.data].id if form.level.data else None
         result.location = form.location.data
         result.n_class = form.n_class.data
 
@@ -127,7 +126,7 @@ def add_result():
     levels = {str(i.id): i for i in db_sess.query(ResultLevel).all()}
     form.olympiad.choices = [(str(k), v.get_name()) for k, v in olympiads.items()]
     form.student.choices = [(str(k), v.get_name()) for k, v in students.items()]
-    form.level.choices = [(str(k), v.name) for k, v in levels.items()]
+    form.level.choices = [('', '')] + [(str(k), v.name) for k, v in levels.items()]
 
     if form.validate_on_submit():
         result = Result()
@@ -135,7 +134,7 @@ def add_result():
         result.student_id = students[form.student.data].id
         result.date = form.date.data
         result.points = form.points.data
-        result.level_id = levels[form.level.data].id
+        result.level_id = levels[form.level.data].id if form.level.data else None
         result.location = form.location.data
         result.n_class = form.n_class.data
         result.place = form.place.data

@@ -1,5 +1,8 @@
+import datetime
+
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, IntegerField, FileField, DateField
+from wtforms import StringField, SubmitField, SelectField, \
+    IntegerField, FileField, DateField, validators
 from wtforms.validators import DataRequired, NumberRange, InputRequired
 
 
@@ -7,13 +10,13 @@ class SubmitResultForm(FlaskForm):
     olympiad = SelectField('Olympiad', validators=[DataRequired()])
     student = SelectField('Student', validators=[DataRequired()])
 
-    date = DateField('Date', validators=[DataRequired()])
-    place = IntegerField('Place', validators=[InputRequired(),
-                                              NumberRange(min=1, message='Слишком маленькое число')])
-    points = IntegerField('Points', validators=[InputRequired(),
-                                                NumberRange(min=0, message='Слишком маленькое число')])
-    level = SelectField('Level', validators=[DataRequired()])
-    location = StringField('Location', validators=[DataRequired()])
+    date = DateField('Date', validators=[DataRequired()], default=datetime.date.today())
+    place = IntegerField('Place', validators=[
+        NumberRange(min=1, message='Слишком маленькое число'), validators.optional()])
+    points = IntegerField('Points', validators=[
+        NumberRange(min=0, message='Слишком маленькое число'), validators.optional()])
+    level = SelectField('Level', validators=[])
+    location = StringField('Location', validators=[])
     protocol = FileField('Protocol', validators=[])
     n_class = SelectField('Class', validators=[DataRequired()],
                           choices={str(i): i for i in range(1, 12)})

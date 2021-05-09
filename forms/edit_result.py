@@ -1,7 +1,7 @@
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, IntegerField, FileField
-from wtforms.validators import DataRequired
+from wtforms import validators, StringField, SubmitField, SelectField, DateField, IntegerField, FileField
+from wtforms.validators import DataRequired, NumberRange
 
 
 class EditResultForm(FlaskForm):
@@ -9,10 +9,12 @@ class EditResultForm(FlaskForm):
     student = SelectField('Student', validators=[DataRequired()])
 
     date = DateField('Date', validators=[DataRequired()])
-    place = IntegerField('Place', validators=[DataRequired()])
-    points = IntegerField('Points', validators=[DataRequired()])
-    level = SelectField('Level', validators=[DataRequired()])
-    location = StringField('Location', validators=[DataRequired()])
+    place = IntegerField('Place', validators=[
+        NumberRange(min=1, message='Слишком маленькое число'), validators.optional()])
+    points = IntegerField('Points', validators=[
+        NumberRange(min=0, message='Слишком маленькое число'), validators.optional()])
+    level = SelectField('Level', validators=[])
+    location = StringField('Location', validators=[])
     protocol = FileField('Protocol', validators=[])
     n_class = SelectField('Class', validators=[DataRequired()],
                           choices={str(i): i for i in range(1, 12)})
