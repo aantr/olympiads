@@ -67,7 +67,7 @@ def get_report(db_sess, query):
             result.olympiad.name,
             result.olympiad.level.name,
             result.n_class,
-            result.date.strftime('%d.%m.') + str(result.date.year),
+            result.date.strftime('%d.%m.') + str(result.date.year).rjust(4, '0'),
             result.student.last_name,
             result.student.first_name,
             (result.student.middle_name if result.student.middle_name else ''),
